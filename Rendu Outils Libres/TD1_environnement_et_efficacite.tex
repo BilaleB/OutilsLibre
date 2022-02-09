@@ -1,0 +1,438 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{geometry}
+\geometry{hmargin=2.5cm,vmargin=1.5cm}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+\title{TD1 efficacité de l'environnement}
+\author{Axel Niclausse Boumadiene Bilale}
+\date{January 2022}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{efficacité de l'environnement :}
+
+\textbf{1\#}
+\begin{tabular}{|c|c|}
+    \hline
+    \textbf{Problème} & \textbf{Correctif} \\
+    \hline
+    Agrandir / Minimiser une fenêtre & Alt + f10 \\
+    \hline
+    Définir une zone de capture d’écran & Fn+Maj+Impr. écran \\
+    \hline
+    Ouvrir un terminal & Alt + f2 → gnome-terminal + Entrée \\
+    \hline
+    Ouvrir un nouvel onglet de terminal & ctrl + maj + T\\
+    \hline
+    copier/coller/couper dans le terminal & ctrl + shift + C / V / X (respectivement)\\
+    \hline
+    Utiliser xsel pour copier le contenu dans le presse-papiers & Cat nomdefichier | xsel \\
+     \hline
+    Rechercher une ancienne commande & Ctrl + R \\
+     \hline
+    Dupliquer l’élément courant & Shift+Ctrl+T \\
+     \hline
+    Commande clear & Ctrl + L \\
+     \hline
+    Présentation de l’environnement de travail & Super + S \\
+     \hline
+    Reculer dans un tableau & Shit + tab \\
+     \hline
+    Verrouiller la session & Super + L \\
+     \hline
+    Split vertical tmux & Ctrl+ B puis MAJ + \%\\
+     \hline
+    Split horizontale tmux & Ctrl + B puis " \\
+     \hline
+    Changement de fenêtre tmux & Ctrl B + flèches directionnelles \\
+    \hline
+\end{tabular}
+\newline
+
+\textbf{2\#}\\
+Site pour améliorer sa dactylographie : https://10fastfingers.com/typing-test/english\\
+Le site propose un accès rapide au test à n’importe quel moment, pas besoin d’inscription ou de login, cependant le site ne propose pas de conseil ou d’explications pour améliorer sa vitesse de frappe ; c’est juste un simple test de dactylographie sur lequel s’exercer.
+\newline 
+\includegraphics[scale=0.3]{fastFinger.png}\\
+
+\textbf{3\#}\\
+\textbf{Paramétrer GNU Readline pour passer en mode Emacs}\\
+\indent user@MyPC:\~\$ set -o emacs\\
+\textbf{Paramétrer Emacs comme éditeur par défaut}\\
+\indent user@MyPC:/etc\$ update-alternatives --config editor et choisir la ligne  \\
+ \indent 2            /usr/bin/emacs       0         mode manuel
+\newline 
+
+\textbf{4\#}\\
+-L’history peut contenir des informations sensibles comme des mots de passe ou des adresses IP que l’on souhaiterait cacher , on peut y remédier en prenant garde a ne pas divulguer ces informations en utilisant des mots de passes cryptés ou ne pas utiliser de programmes demandant d’informations sensibles directement dans la ligne de commande, il est aussi possible d'effacer son history ou encore un vieux bug shell existe, il suffit de mettre un espace avant la commande a taper.\\
+-L’employé peut avoir effacé son history récemment avec la commande history -c\\
+-pour éviter d’afficher des commandes tels que ls, pwd ou cd on peut utiliser la commande ;\\
+	\indent export HISTIGNORE=’ls:pwd:cd’
+\newpage
+
+\textbf{5\#}\\
+\textbf{Script mkcd} (à mettre dans le bash.rc): \\
+!\#/bin/bash\\
+function mkcd ()\{\\
+\indent mkdir \$1\\
+\indent cd \$1\\
+\}\\
+\newline
+\textbf{Script GitEmergency} (à mettre dans le bash.rc):\\
+\newline 
+
+\textbf{6\#}\\
+\textbf{Script de sauvegarde du /home/}\\
+On crée un script vide backup.sh\\
+puis on ajoute ce script dans /etc/bash\_completion\\
+\newline
+!\#/bin/bash\\
+\_backup()\\
+\{\\
+\indent local cur prev opts\\
+\newline
+\indent cur="\$\{COMP\_WORDS[COMP\_CWORD]\}"\\
+\indent prev="\$\{COMP\_WORDS[COMP\_CWORD-1]\}"\\
+\newline
+\indent local files=("\$\{cur\}"*)\\
+\newline
+\indent case \$COMP\_CWORD in\\
+\indent\indent 1) opts=`getent passwd | cut -d: -f1`;;\\
+\indent\indent 2) opts="now tonight tomorrow";;\\
+\indent\indent 3) opts="\$\{files[@]\}";;\\
+\indent\indent *);;\\
+\indent esac\\
+\indent COMPREPLY=()\\
+\indent COMPREPLY=( \$(compgen -W "\$opts" -- \$\{cur\}) )\\
+\indent return 0\\
+\}\\
+complete -o nospace -F \_backup backup\\
+
+\textbf{7\#}\\
+J’installe ohmyzsh, je le définit comme shell par défaut.\\
+J’ouvre le fichier .zshrc et j’ajoute dans la catégorie plugin le plugin "vagrant-prompt" et j’ajoute en bas du fichier le script suivant :
+\newline
+\includegraphics[scale=0.5]{OhMyZsh_vagrantprompt.png}\\
+\newpage
+J'ajoute ensuite dans \~/.oh-my-zsh/themes/[theme utilisé] les variables suivantes :\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_PREFIX="\%\{\$fg\_bold[blue]\%\}["\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_SUFFIX="\%\{\$fg\_bold[blue]\%\}]\%\{\$reset\_color\%\} "\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_RUNNING="\%\{\$fg\_no\_bold[green]\%\}●"\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_POWEROFF="\%\{\$fg\_no\_bold[red]\%\}●"\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_SUSPENDED="\%\{\$fg\_no\_bold[yellow]\%\}●"\\
+\indent ZSH\_THEME\_VAGRANT\_PROMPT\_NOT\_CREATED="\%\{\$fg\_no\_bold[white]\%\}○"\\
+\newline
+On ressource ensuite le shell source \~/.zshrc.\\
+Le plugin nous informe bien de l’état des vagrant du dossier courant :
+\newline
+\includegraphics[scale=0.7]{vagrant_dossier_courant.png}\\
+
+\textbf{8\#}\\
+On ajoute ce script dans le fichier .zshrc
+\newline
+\includegraphics[scale=0.5]{ctrl+shift+a_Apache.png}\\
+\newline
+A chaque utilisation du raccourci ctrl + shift + a, apache2 s’active et se désactive en fonction de son état initial.\\
+
+\textbf{9\#}\\
+\textbf{Terminal gnome :}\\
+-coloration syntaxique,\\
+-événements de souris pris en compte,\\
+-détection d’URL ou d’adresse mail pour le texte détecté.\\
+\newline
+\textbf{Tmux :}\\
+-multi fenêtre très simple d’utilisation et adaptable,\\
+-possibilité de dimensionner le multiplexage a sa guise,\\
+\newline
+\textbf{Guake :}\\
+-terminal léger,\\
+-apparait et disparaît par une touche prédéfinit (f12 de base),\\
+-prise en charge de la transparence "Compiz".\\
+\newpage
+
+\section{SSH :}  
+
+\textbf{1\#}\\
+\indent user@MyPC:\~/ssh\$ ssh alice@10.0.0.3 + Entrer le password dans le readme\\
+\indent alice@srv:\~\$hostname\\
+\indent srv\\
+\indent user@MyPC:\~/ssh\$ ssh bob@10.0.0.3 + Entrer le password dans le readme\\
+\indent bob@srv:\~\$hostname\\
+\indent srv\\
+\indent user@MyPC:\~/ssh\$ ssh carol@10.0.0.3 + Entrer le password dans le readme\\
+\indent carol@srv:\~\$hostname\\
+\indent srv\\
+\\
+On vérifie avec hostname que l’on est bien sur la machine Vagrant\\
+
+\textbf{2\#}\\
+\textbf{Créer une paire de clés privée et publique à l'aide de ssh-keygen}\\
+user@MyPC:\~/.ssh\$ ssh-keygen\\
+\newline
+\textbf{Utiliser la commande ssh-copy-id pour déposer la clé publique sur le compte alice@cli. \\}
+\indent user@MyPC:\~/ssh\$ cd /home/user/.ssh/\\
+\indent user@MyPC:\~/.ssh\$ ssh-copy-id -i id\_ rsa.pub alice@10.0.0.2\\
+\indent user@MyPC:\~/.ssh\$ ssh alice@10.0.0.2\\
+On peut se connecter sans password\\
+\newline
+\textbf{Déposer manuellement la clé publique sur le compte bob@cli}\\
+\indent user@MyPC:\~/.ssh\$ cat id\_rsa.pub →Copier le contenu du fichier\\
+\indent user@MyPC:\~/.ssh\$ ssh bob@10.0.0.2\\
+\indent bob@cli:\~\$ mkdir -p \~/.ssh\\
+\indent bob@cli:\~\$ cd /home/user/.ssh\\
+\indent bob@cli:\~/.ssh\$ echo ssh-rsa (Coller le contenu du fichier id\_rsa.pub) user@MyPC >> \~/.ssh/authorized\_keys\\
+\indent bob@cli:\~/.ssh\$ exit\\
+\indent Connection to 10.0.0.2 closed.\\
+\indent user@MyPC:\~/.ssh\$ ssh bob@10.0.0.2\\
+\indent bob@cli:\~\$ \\
+On peut maintenant se connecter sur bob@cli sans mot de passe\\
+\newline
+\textbf{Bonus: Qu'est ce que la passphrase d'une clé privée ?}\\
+SSH utilise des clés publiques/privées pour protéger la communcation avec le serveur ,une passphrase agit un peu comme un password pour la clé privée qui permet de l’encrypter pour la protéger.\\
+\newline
+\textbf{Comment éviter de la retapper à chaque connexion ? Utiliser ssh-agent et ssh-add.}\\
+\indent user@MyPC:\~/.ssh\$ ssh-agent \$SHELL\\
+\indent user@MyPC:\~/.ssh\$ ssh-add\\
+\indent Identity added: /home/user/.ssh/id\_rsa (user@MyPC)\\
+\indent user@MyPC:\~/.ssh\$ ssh alice@10.0.0.2\\
+\indent alice@cli:\~\$ \\
+Nous sommes arrivé a nous connecter sans taper la passphrase\\
+
+\newpage
+\textbf{3\#}\\
+Purger le fichier \~/.ssh/known\_hosts si nécessaire\\
+\indent user@MyPC:\~/.ssh\$ > known\_hosts \\
+A l'aide de ssh-keygen et ssh-keyscan, ajouter la clé publique du serveur srvmanuellement, décrire les étapes.\\
+Ssh-keyscan -H srv.local >> \~/.ssh/known\_hosts\\
+.ssh/config\\
+Host bc\\
+\indent Hostname 192.168.57.2\\
+\indent User bob\\
+sftp alice@cli\\
+\indent get /etc/apt/sources.list\\
+\indent put test\\
+\\
+mkdir /tmp/bobcli\\
+sshfs bob@cli.local:/home /tmp/bobcli\\
+fusermount -u /tmp/bobcli\\
+
+\textbf{3\#}\\
+user@MyPC:\~\$ sftp alice@10.0.0.2\\
+alice@10.0.0.2's password: \\
+Connected to alice@10.0.0.2.\\
+sftp> put test.txt\\
+Uploading test.txt to /home/alice/test.txt\\
+test.txt                                                                                                                                            100\% 10MB 105.2MB/s   00:00\\
+    
+{sftp> get loopbackfile3.img ssh\\
+Fetching /home/alice/loopbackfile3.img to ssh/loopbackfile3.img\\
+/home/alice/loopbackfile3.img                                                                                              100\%   10MB 113.7MB/s   00:00\\
+
+\textbf{4\#}\\
+\textbf{Créer un tunnel SSH entre votre poste et srv à travers la machine cli}\\
+user@MyPC:\~/vagrant\$ sudo ssh -L 8000:srv.local:80 alice@10.0.0.2\\
+\textbf{Tester en ouvrant un navigateur sur votre poste local à l'adresse http://localhost:8000/cgi-bin/test1.cgi}\\
+\includegraphics[scale=0.7]{tunnelSSH.png}\\
+
+ \textbf{5\#}\\
+\textbf{Sur la machine physique :}\\
+\indent ssh -D 9000 srv.local\\
+\indent sudo vi /etc/tsocks.conf\\
+\textbf{Commenter les lignes suivantes (puisque que Vagrant est en local) :}\\
+\indent \#local = 192.168.0.0/255.255.255.0\\
+\indent \#local = 10.0.0.0/255.0.0.0\\
+\textbf{Modifier la ligne suivante :}\\
+server\_port = 9000\\
+
+\newpage
+\textbf{6\#}\\
+-Installation des paquets\\
+vagrant@cli:\~\$ sudo apt-get install x11-apps\\
+-Configuration du forwarding\\
+vagrant@cli:\~\$ sudo nano /etc/ssh/ssh\_config\\
+Changer la ligne \\
+-ForwardX11 no -> Forward X11 yes\\
+-Restart du service\\
+vagrant@cli:\~\$ systemctl restart sshd\\
+-Connexion à la machine cliente avec le forwarding\\
+user@user:\~/cours\_outils\_libre/vagrant\$ ssh -X bob@10.0.0.2\\
+Affichage d’un message d’erreur : /usr/bin/xauth: file /root/.Xauthority does not exist mais le fichier .Xauthority à été généré lors du premier login donc les autres s'effectueront correctement\\
+-Lancement de l’application xeyes\\
+bob@cli:\~\$ xeyes\\
+\includegraphics[scale=0.4]{screen_xeyes.png}\\
+
+\newpage
+\textbf{7\#}\\
+\textbf{En utilisant ProxyJump :}
+user@user:\~/cours\_outils\_libre/vagrant\$ sudo nano \~/.ssh/config\\
+\\
+Host cli\\
+\indent	Hostname 10.0.0.2\\
+\indent	User bob\\
+\\
+Host srv\\
+\indent	User bob  \\
+\indent	Hostname 10.0.0.3\\
+\indent	ProxyJump bob@10.0.0.2:22\\
+\\
+\#Test de la connexion\\
+user@user:\~/cours\_outils\_libre/vagrant\$ ssh srv\\
+bob@10.0.0.2's password:\\
+bob@10.0.0.3's password:\\
+Last login: Thu Jan  6 09:05:19 2022 from 10.0.0.1\\
+bob@srv:\~\$ who\\
+bob      pts/0        2022-01-06 09:20 (10.0.0.2)\\
+\\
+Le Proxyjump fonctionne donc correctement\\
+\\
+\textbf{En utilisant ProxyCommand}\\
+Dans le fichier ~/.ssh/config de la machine locale : \\
+\\
+Host cli\\
+\indent	Hostname 10.0.0.2\\
+\indent	User bob\\
+\\
+Host srv\\
+\indent	User bob\\
+\indent	Hostname 10.0.0.3\\
+\indent	ProxyCommand ssh cli -W \%h:\%p\\
+
+\newpage
+\section{Github :}  
+
+
+\newpage
+\section{Page Man de la commande  :} 
+
+clear(1)                               \indent \indent\indent \indent \indent \indent General Commands Manual                              \indent \indent \indent\indent \indent \indent clear(1)\\
+\\
+\indent NAME
+
+    \leftskip=1cm
+    
+        clear - clear the terminal screen\\
+        
+    \leftskip=0cm
+    
+SYNOPSIS
+
+    \leftskip=1cm
+    
+       clear [-Ttype] [-V] [-x]\\
+
+    \leftskip=0cm
+    
+DESCRIPTION
+
+    \leftskip=1cm
+    
+       clear  clears  your  screen  if this is possible, including its scrollback buffer (if the ex‐
+       tended “E3” capability is defined).  clear looks in the environment  for  the  terminal  type
+       given by the environment variable TERM, and then in the terminfo database to determine how to
+       clear the screen.\\
+       \\
+       clear writes to the standard output.  You can redirect the standard output to a  file  (which
+       prevents  clear  from  actually  clearing  the screen), and later cat the file to the screen,
+       clearing it at that point.\\
+       
+    \leftskip=0cm
+        
+OPTIONS
+
+    \leftskip=1cm
+
+       -T type\\       
+            indicates the type of terminal.  Normally this option is unnecessary,  because  the  de‐
+            fault  is  taken from the environment variable TERM.  If -T is specified, then the shell
+            variables LINES and COLUMNS will also be ignored.\\
+  \\
+        -V   reports the version of ncurses which was used in this program, and exits.   The  options
+            are as follows:\\
+\\
+       -x   do  not  attempt to clear the terminal's scrollback buffer using the extended “E3” capa‐
+            bility.\\
+
+    \leftskip=0cm
+
+HISTORY
+
+    \leftskip=1cm
+    
+       A clear command appeared in 2.79BSD dated February 24, 1979.  Later that was provided in Unix
+       8th edition (1985).\\
+\\
+       AT\&T  adapted  a  different BSD program (tset) to make a new command (tput), and used this to
+       replace the clear command with a shell script which calls tput clear, e.g.,\\
+\\
+           /usr/bin/tput \$\{1:+-T\$1\} clear 2> /dev/null\\
+           exit\\
+\\
+       In 1989, when Keith Bostic revised the BSD tput command to make it similar to the AT\&T  tput,
+       he added a shell script for the clear command:\\
+\\
+           exec tput clear\\
+\\
+       The remainder of the script in each case is a copyright notice.\\
+\\
+       The ncurses clear command began in 1995 by adapting the original BSD clear command (with ter‐
+       minfo, of course).\\
+\\
+       The E3 extension came later:\\
+\\
+       •   In June 1999, xterm provided an extension to the standard control sequence  for  clearing
+           the screen.  Rather than clearing just the visible part of the screen using\\
+\\
+               printf '\textbackslash 033[2J'\\
+\\
+           one could clear the scrollback using\\
+\\
+               printf '\textbackslash 033[3J'\\
+\\
+           This is documented in XTerm Control Sequences as a feature originating with xterm.\\
+\\
+       •   A few other terminal developers adopted the feature, e.g., PuTTY in 2006.\\
+\\
+       •   In  April  2011, a Red Hat developer submitted a patch to the Linux kernel, modifying its
+           console driver to do the same thing.  The Linux change, part of the 3.0 release, did  not
+           mention xterm, although it was cited in the Red Hat bug report (\#683733) which led to the
+           change.\\
+\\
+       •   Again, a few other terminal developers adopted the feature.  But the next  relevant  step
+           was a change to the clear program in 2013 to incorporate this extension.\\
+\\
+       •   In  2013,  the  E3 extension was overlooked in tput with the “clear” parameter.  That was
+           addressed in 2016 by reorganizing tput to share its logic with clear and tset.\\
+\\
+
+    \leftskip=0cm
+    
+PORTABILITY
+
+    \leftskip=1cm
+    
+       Neither IEEE Std 1003.1/The Open  Group  Base  Specifications  Issue   7  (POSIX.1-2008)  nor
+       X/Open Curses Issue 7 documents tset or reset.\\
+\\
+       The  latter  documents  tput,  which could be used to replace this utility either via a shell
+       script or by an alias (such as a symbolic link) to run tput as clear.\\
+
+    \leftskip=0cm       
+
+SEE ALSO
+
+    \leftskip=1cm
+    
+       tput(1), terminfo(5)\\
+
+    \leftskip=0cm
+
+This describes ncurses version 6.2 (patch 20201114).\\
+
+\end{document}
